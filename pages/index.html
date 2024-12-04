@@ -40,8 +40,15 @@
                     const classList = document.getElementById('classList');
                     data.classes.forEach(cls => {
                         const li = document.createElement('li');
-                        li.className = 'list-group-item';
-                        li.textContent = cls;
+                        li.className = 'list-group-item d-grid gap-2';
+
+                        const link = document.createElement('a');
+                        link.href = `${cls}`; // 根据需要修改链接地址
+                        link.target = '_blank';
+                        link.className = 'btn';
+                        link.textContent = cls;
+
+                        li.appendChild(link);
                         classList.appendChild(li);
                     });
 

@@ -87,6 +87,14 @@ class CustomHTTPRequestHandler(SimpleHTTPRequestHandler):
         with open(root_json_index_path, 'w', encoding="utf-8") as f:
             json.dump(root_index, f, ensure_ascii=False, indent=4)
 
+        # 更新文件夹下的index.html
+        # 将template/pages.html复制到{root_class}/index.html
+        index_html_path = os.path.join(os.getcwd(), 'template', 'pages.html')
+        with open(index_html_path, 'r', encoding="utf-8") as f:
+            index_html = f.read()
+        with open(os.path.join(img_base_path, 'index.html'), 'w', encoding="utf-8") as f:
+            f.write(index_html)
+
 
 # 设置服务器地址和端口
 server_address = ('', 8000)
