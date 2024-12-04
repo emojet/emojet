@@ -1,1 +1,72 @@
-init
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+    <title>表情包选择</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row mb-3">
+            <div class="col">
+                <input type="text" id="searchBox" class="form-control" placeholder="搜索表情">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h5>搜索结果</h5>
+                <div id="searchResults" class="row">
+                    <!-- 搜索结果 -->
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <h5>表情分类</h5>
+                <ul id="classList" class="list-group">
+                    <!-- 表情分类列表 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="./table.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const baseUrl = window.location.href.endsWith('/') ? window.location.href : window.location.href + '/';
+            const jsonUrl = new URL('./index.json', baseUrl).href;
+            fetch(jsonUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const classList = document.getElementById('classList');
+                    data.classes.forEach(cls => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = cls;
+                        classList.appendChild(li);
+                    });
+
+                    const searchBox = document.getElementById('searchBox');
+                    searchBox.addEventListener('input', function() {
+                        const query = searchBox.value.trim();
+                        const searchResults = document.getElementById('searchResults');
+                        searchResults.innerHTML = '';
+
+                        if (query) {
+                            const emotions = data.emotions[query];
+                            if (emotions) {
+                                emotions.forEach(imgPath => {
+                                    const emojiShow = document.createElement('div');
+                                    emojiShow.className = "col-3 mb-3 emoji-show";
+                                    emojiShow.setAttribute('src', `./${imgPath}`);
+                                    searchResults.appendChild(emojiShow);
+                                    initializeEmojiShow(emojiShow);
+                                });
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching index.json:', error));
+        });
+    </script>
+</body>
+</html>
