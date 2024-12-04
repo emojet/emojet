@@ -11,7 +11,8 @@ function initializeEmojiShow(emojiShow) {
         const img = document.createElement('img');
         img.className = 'card-img-top';
         img.alt = 'Emoji Image';
-        img.src = new URL(src, window.location.href).href;
+        const baseUrl = window.location.href.endsWith('/') ? window.location.href : window.location.href + '/';
+        img.src = new URL(src, baseUrl).href;
         card.appendChild(img);
 
         // 创建卡片主体

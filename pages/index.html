@@ -32,7 +32,9 @@
     <script src="./table.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('./index.json')
+            const baseUrl = window.location.href.endsWith('/') ? window.location.href : window.location.href + '/';
+            const jsonUrl = new URL('./index.json', baseUrl).href;
+            fetch(jsonUrl)
                 .then(response => response.json())
                 .then(data => {
                     const classList = document.getElementById('classList');
