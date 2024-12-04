@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../bootstrap.min.css">
+    <title>表情包展示</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <h5 id="title">表情包</h5>
+                <div id="emojiList" class="row">
+                    <!-- 表情包列表 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../table.js"></script>
+    <script>
+        function setTitleFromURI() {
+            const pathSegments = window.location.pathname.split('/');
+            const lastSegment = pathSegments.pop() || pathSegments.pop();
+            const decodedSegment = decodeURIComponent(lastSegment);
+            const title = "表情包-" + decodedSegment.replace(/^\/|\/$/g, ''); // Remove leading and trailing slashes
+            document.title = title;
+
+            // 更精确地选择 id 为 title 的 <h5> 元素
+            const h5Element = document.getElementById('title');
+            if (h5Element) {
+                h5Element.textContent = title;
+            }
+        }
+
+        setTitleFromURI();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const baseUrl = window.location.href.endsWith('/') ? window.location.href : window.location.href + '/';
+            const jsonUrl = new URL('./index.json', baseUrl).href;
+            fetch(jsonUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const emojiList = document.getElementById('emojiList');
+                    Object.keys(data).forEach(key => {
+                        const imgPath = data[key];
+                        const emojiShow = document.createElement('div');
+                        emojiShow.className = "col-3 mb-3 emoji-show";
+                        emojiShow.setAttribute('src', `./${imgPath}`);
+                        emojiList.appendChild(emojiShow);
+                        initializeEmojiShow(emojiShow); // 调用函数
+                    });
+                })
+                .catch(error => console.error('Error fetching index.json:', error));
+        });
+    </script>
+</body>
+</html>
