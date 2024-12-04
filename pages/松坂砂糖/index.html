@@ -9,7 +9,7 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col">
-                <h5>表情包</h5>
+                <h5 id="title">表情包</h5>
                 <div id="emojiList" class="row">
                     <!-- 表情包列表 -->
                 </div>
@@ -24,6 +24,12 @@
             const decodedSegment = decodeURIComponent(lastSegment);
             const title = "表情包-" + decodedSegment.replace(/^\/|\/$/g, ''); // Remove leading and trailing slashes
             document.title = title;
+
+            // 更精确地选择 id 为 title 的 <h5> 元素
+            const h5Element = document.getElementById('title');
+            if (h5Element) {
+                h5Element.textContent = title;
+            }
         }
 
         setTitleFromURI();
